@@ -1,0 +1,11 @@
+.no-data-con {
+  min-height: 100vh;
+  padding: 0 0 50px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-add-root {
+
+}
