@@ -1,107 +1,105 @@
-import React, {useRef, useReducer, useState} from 'react';
-import {Link} from "react-router-dom";
+import React from 'react';
+import {Button, Cell, Input} from "zarm";
 
-import {Cell, Input, Button} from "zarm";
-
-export default function Login(props) {
-  const smsCodeFocus = useRef();
-  const passwordFocus = useRef();
-
-
-  const [formData, dispatch] = useReducer((formData, action) => {
-    const res = {};
-    Object.entries(action).forEach(([k, v]) => res[k] = v);
-    return res;
-  }, {
-    phone: '',
-    password: '',
-    passwordFree: false,
-    smsCode: '',
-  });
-
-  const [send, setSend] = useState({
-    sending: false,
-    sec: 5,
-    id: '',
-  })
-
-  const handleInput = (k, v, cb) => {
-    dispatch({[k]: v});
-    cb && cb();
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      phone: '',
+      password: '',
+      passwordFree: false,
+      smsCode: '',
+      id: '',
+      sending: false,
+      wait: 5,
+    }
   }
 
-  const handleSendSms = () => {
-    if (send.sending) return;
-    setSend({
-      ...send,
-      sending: true
-    });
-    send.id = setInterval(() => {
-      if (send.sec > 0) {
-        send.sec--;
-        setSend({
-          sec: send.sec,
-          sending: true,
-        })
-      } else {
-        setSend({
-          sec: 5,
-          sending: false,
-        })
-        clearInterval(send.id);
-      }
-    }, 1000);
+  handleInput = (key, e) => {
+    this.setState({
+      ...this.state,
+      [key]: typeof e === 'object' ? e.current.value : e
+    })
   }
 
-  return (
-    <div>
-      <Cell title="+86">
-        <Input
-          type="number"
-          placeholder="请输入手机号"
-          value={formData.phone}
-          onChange={handleInput.bind(null, 'phone')}
-        />
-      </Cell>
-      {
-        formData.passwordFree ?
-          <Cell title="验证码">
-            <Input
-              ref={smsCodeFocus}
-              type="number"
-              placeholder="请输入验证码"
-              value={formData.smsCode}
-              onChange={handleInput.bind(null, 'smsCode')}
-            />
-            {
-              send.sending ?
-                <Button loading block theme="primary">{send.sec}</Button> :
-                <Button onClick={handleSendSms} block theme="primary">发送验证码</Button>
-            }
-          </Cell> :
-          <Cell title="密码">
-            <Input
-              ref={passwordFocus}
-              type="password"
-              placeholder="请输入密码"
-              value={formData.password}
-              onChange={handleInput.bind(null, 'password')}
-            />
-          </Cell>
-      }
-      <a onClick={handleInput.bind(null, 'passwordFree', !formData.passwordFree, () => {
-        if (!formData.passwordFree) passwordFocus.current.focus();
-        else smsCodeFocus.current.focus();
-      })}>
+  handleSendSmsCode = () => {
+    if (this.state.sending) return;
+    this.setState({
+      ...this.state,
+      sending: true,
+      id: setInterval(() => {
+        this.setState((prevState => {
+          return {
+            ...prevState,
+            wait: prevState.wait - 1
+          }
+        }));
+      }, 1000)
+    })
+  }
+
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.sending && prevState.wait <= 0) {
+      clearInterval(prevState.id);
+      this.setState({
+        ...this.state,
+        sending: false,
+        wait: 5,
+        id: ''
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div>
+        <Cell title="+86">
+          <Input
+            type="number"
+            placeholder="请输入手机号"
+            value={this.state.phone}
+            onChange={e => this.handleInput('phone', e)}
+          />
+        </Cell>
         {
-          !formData.passwordFree ?
-            '免密码登陆' :
-            '密码登陆'
+          this.state.passwordFree ?
+            <Cell title="验证码">
+              <Input
+                type="number"
+                placeholder="请输入验证码"
+                value={this.state.smsCode}
+                onChange={e => this.handleInput('smsCode', e)}
+              />
+              {
+                this.state.sending ?
+                  <Button loading block theme="primary">{'(等待)'+this.state.wait}</Button> :
+                  <Button onClick={this.handleSendSmsCode} block theme="primary">发送验证码</Button>
+              }
+            </Cell> :
+            <Cell title="密码">
+              <Input
+                type="password"
+                placeholder="请输入密码"
+                value={this.state.password}
+                onChange={e => this.handleInput('password', e)}
+              />
+            </Cell>
         }
-      </a>
-      <Cell>
-        <Button block theme='primary'>登陆</Button>
-      </Cell>
-    </div>
-  )
+        <a onClick={() => this.handleInput('passwordFree', !this.state.passwordFree)}>
+          {
+            !this.state.passwordFree ?
+              '免密码登陆' :
+              '密码登陆'
+          }
+        </a>
+        <Cell>
+          <Button block theme='primary'>登陆</Button>
+        </Cell>
+      </div>
+
+    )
+  }
 }
+
+export default Login
