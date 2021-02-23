@@ -12,7 +12,7 @@ export default function NoData(props) {
         no data
         <Button
           onClick={onCreateRoot}
-          className='button-add-root' block theme="primary">插入根节点</Button>
+          className='button-add-root' block theme="primary">创建根节点</Button>
       </div>
 
     </>

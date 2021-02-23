@@ -12,7 +12,6 @@ export default function EditModal(props) {
   const {visible, setVisible, editType} = props;
 
   const handleRenderForm = (editType) => {
-    console.error('editType: ', editType);
     switch (editType) {
       case EDIT_TYPE.createRoot:
         return <FormCreateRoot/>

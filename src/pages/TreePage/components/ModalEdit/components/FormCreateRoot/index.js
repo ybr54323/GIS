@@ -6,7 +6,6 @@ export default function FormCreateRoot(props) {
   const [rootName, setRootName] = useState('');
   const GC = useContext(GlobalContext);
 
-
   return (
     <>
       <Cell title="根节点名称">

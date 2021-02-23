@@ -7,13 +7,16 @@ import React, {useState, useRef, useReducer} from 'react';
 import {Link} from "react-router-dom";
 
 import 'zarm/dist/zarm.min.css';
-import {Icon} from "zarm";
+import {Icon, Toast} from "zarm";
 import {TREE_PAGE_ACTION, EDIT_TYPE, INIT_TEM_DATA, INIT_DIR, MyNode} from "../../util/constant";
+import {offLineSave, offLineRead} from "../../util";
+
 
 export const GlobalContext = React.createContext({});
 
+
 export default function TreePage(props) {
-  const {tree = []} = props;
+  const {tree = offLineRead('data') || []} = props;
 
   const [data, setData] = useState(tree);
 
@@ -33,7 +36,6 @@ export default function TreePage(props) {
 
   let {current: editType} = useRef({...EDIT_TYPE})
 
-  console.warn('render TreePage')
 
   const handleCreateRoot = () => {
     editType.currentType = 'CREATE_ROOT';
@@ -44,7 +46,8 @@ export default function TreePage(props) {
     <GlobalContext.Provider value={{
       handleCreateRootSubmit(...args) {
         const [rootName] = args;
-        setData([new MyNode(rootName)]);
+        data.push(new MyNode(rootName));
+        offLineSave('data', data);
         handleToggle('editModalVisible');
       },
       handleEditAction(...args) {
@@ -65,6 +68,7 @@ export default function TreePage(props) {
       handleAddDirSubmit(...args) {
         const [dirName] = args;
         temData.currentNode.children.push(new MyNode(dirName));
+        offLineSave('data', data);
         handleToggle('editModalVisible');
         handleToggle('editActionShellVisible');
       },

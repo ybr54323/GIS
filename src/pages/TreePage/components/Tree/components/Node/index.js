@@ -17,7 +17,6 @@ export default function Node(props) {
   const {tree, isRoot = false, onSelect} = props;
 
   const [data, setData] = useState(tree || {});
-  console.warn('render Node')
 
 
   const handleClick = (...args) => {

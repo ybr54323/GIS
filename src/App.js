@@ -6,22 +6,25 @@ import 'zarm/dist/zarm.min.css';
 import {TabBar, Icon} from "zarm";
 import TreePage from '@/pages/TreePage'
 import FormPage from '@/pages/FormPage';
+import Login from '@/pages/Login';
 
 const TabIcon = Icon.createFromIconfont('//at.alicdn.com/t/font_1340918_lpsswvb7yv.js');
 
-function App() {
+function App(props) {
+
+  console.log(props);
 
   return (
 
-    <div>
+    <div className='app-con'>
 
       <Switch>
         <Route exact path="/" component={TreePage}/>
         <Route exact path="/formPage" component={FormPage}/>
+        <Route exact path="/login" component={Login}/>
         {/* when none of the above match, <NoMatch> will be rendered */}
         <Route component={() => (<div>404</div>)}/>
       </Switch>
-
       <TabBar
         visible={true}
         // activeKey={activeKey}
