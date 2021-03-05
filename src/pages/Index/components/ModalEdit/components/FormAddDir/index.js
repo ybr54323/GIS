@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {Button, Cell, Input} from "zarm";
-import {GlobalContext} from '@/pages/TreePage/index';
+import {GlobalContext} from '@/pages/Index/index';
 
 
 export default function Index(props) {
@@ -22,7 +22,7 @@ export default function Index(props) {
         <Button
           disabled={!dirName}
           block theme="primary"
-          onClick={GC.handleAddDirSubmit.bind(GC, dirName)}
+          onClick={GC.handleAddDirSubmit.bind(null, dirName)}
         >确认</Button>
       </Cell>
     </>

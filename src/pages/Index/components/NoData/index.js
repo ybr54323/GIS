@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button} from "zarm";
 import './index.css';
-import {Link} from "react-router-dom";
 
 export default function NoData(props) {
   const {onCreateRoot} = props;

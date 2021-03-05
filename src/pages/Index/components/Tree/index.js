@@ -1,4 +1,4 @@
-import './Tree.css';
+// import './Tree.css';
 import Node from "./components/Node";
 
 import React, {useMemo} from 'react';

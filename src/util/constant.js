@@ -22,6 +22,7 @@ export const EDIT_TYPE = {
 
 export const INIT_TEM_DATA = {
   currentNode: null,
+  updateViewCb: () => void 0,
   currentRoot: null,
 }
 export const INIT_DIR = {
@@ -32,8 +33,19 @@ export const INIT_DIR = {
 
 export class MyNode {
   constructor(val) {
-    this.val = val;
-    this.checked = false;
-    this.children = [];
+    this.id = +Date.now()
+    this.name = val;
+    this.checkedChildNodeList = false;
+    this.checkedGoodList = false;
+    this.childNodeList = [];
+    this.goodList = [];
+  }
+}
+
+export class Good {
+  constructor(val) {
+    this.name = val;
+
+
   }
 }

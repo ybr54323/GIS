@@ -1,6 +1,6 @@
 import React, {useState, useContext} from 'react';
 import {Button, Cell, Input} from "zarm";
-import {GlobalContext} from "@/pages/TreePage/index";
+import {GlobalContext} from "@/pages/Index/index";
 
 export default function FormCreateRoot(props) {
   const [rootName, setRootName] = useState('');
